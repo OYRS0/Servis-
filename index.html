@@ -1,255 +1,1368 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drive Med — клиника для машин</title>
-  
-  <!-- Подключаем шрифты и иконки -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  
-  <style>
-    :root {
-      --blue: #0b5ed7;
-      --light: #f4f7fb;
-      --dark: #1c1f26;
-      --accent: #00c2ff;
-      --card: #ffffff;
-      --red: #dc3545;
-      --green: #28a745;
-      --gap: 20px;
-      --padding: 30px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive Med | Автосервис премиум-класса</title>
     
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--light);
-      color: var(--dark);
-      line-height: 1.6;
-    }
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    h1, h2, h3, h4 {
-      margin-bottom: var(--gap);
-    }
+    <style>
+        :root {
+            --primary: #0056b3;
+            --primary-dark: #003d82;
+            --secondary: #00b4d8;
+            --accent: #ff6b35;
+            --accent-light: #ff9e6d;
+            --light: #f8f9fa;
+            --dark: #1a1a2e;
+            --gray: #6c757d;
+            --success: #28a745;
+            --warning: #ffc107;
+            --card-bg: #ffffff;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.5;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 70px 0;
+        }
+        
+        /* ========== HEADER ========== */
+        .notification-bar {
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--secondary) 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            padding: 40px 0 80px;
+        }
+        
+        .header-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .medical-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .tagline {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        /* ========== НАВИГАЦИЯ ========== */
+        nav {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* ========== ПРОВЕРКА МЕДКАРТЫ ========== */
+        .check-section {
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .check-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        
+        .check-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .input-group {
+            display: flex;
+            max-width: 500px;
+            margin: 25px auto;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+            background: #f8f9fa;
+        }
+        
+        .input-group button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 0 25px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .input-group button:hover {
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+        }
+        
+        /* ========== ПОДПИСКИ ========== */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background: white;
+            border-radius: 30px;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            border: 1px solid #eee;
+        }
+        
+        .tab:hover {
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .subscriptions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .subscription-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid #eee;
+        }
+        
+        .subscription-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .subscription-card.popular {
+            border: 2px solid var(--accent);
+            position: relative;
+        }
+        
+        .subscription-card.popular::before {
+            content: 'ПОПУЛЯРНЫЙ';
+            position: absolute;
+            top: -10px;
+            right: 15px;
+            background: var(--accent);
+            color: white;
+            padding: 3px 15px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border-radius: 15px;
+        }
+        
+        .subscription-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .price span {
+            font-size: 0.9rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        
+        .features-list li {
+            padding: 6px 0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .features-list li i {
+            color: var(--success);
+            font-size: 0.8rem;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* ========== СЕРТИФИКАТЫ И КОРПОРАТИВ ========== */
+        .extras-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .extra-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .extra-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .extra-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* ========== МЕДКАРТА ========== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        
+        .medical-card {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .card-header {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .card-content {
+            padding: 25px;
+        }
+        
+        .patient-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .info-item h4 {
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .info-item p {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .card-section {
+            margin-bottom: 25px;
+        }
+        
+        .card-section h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .visit-item {
+            background: white;
+            border-left: 3px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 6px 6px 0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .visit-date {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        
+        .visit-amount {
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        /* ========== БАЛЛЬНАЯ СИСТЕМА ========== */
+        .points-section {
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .points-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .points-balance {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .points-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .points-action {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid #eee;
+        }
+        
+        .points-action:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .reward-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+        }
+        
+        .reward-cost {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 10px 0;
+        }
+        
+        /* ========== ФУТЕР ========== */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+        
+        /* ========== АДАПТИВНОСТЬ ========== */
+        @media (max-width: 992px) {
+            h1 { font-size: 2.2rem; }
+            .nav-links { display: none; }
+        }
+        
+        @media (max-width: 768px) {
+            section { padding: 50px 0; }
+            .check-card { padding: 20px 15px; }
+            .input-group { flex-direction: column; }
+            .input-group input, .input-group button { width: 100%; }
+            .tabs { flex-direction: column; align-items: center; }
+            .tab { width: 100%; max-width: 250px; text-align: center; }
+        }
+        
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 99999;
+            animation: slideIn 0.3s ease;
+            max-width: 350px;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .notification.success { border-left: 4px solid var(--success); }
+        .notification.error { border-left: 4px solid var(--accent); }
+        .notification i { font-size: 1.2rem; }
+        .notification.success i { color: var(--success); }
+        .notification.error i { color: var(--accent); }
+    </style>
+</head>
+<body>
+    <!-- Уведомление -->
+    <div class="notification-bar">
+        🎉 Первые 100 клиентов получают статус «Пациент №1» + 5000 приветственных баллов
+    </div>
     
-    button {
-      cursor: pointer;
-      border: none;
-      outline: none;
-    }
+    <!-- Шапка -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="medical-icon">
+                    <i class="fas fa-ambulance"></i>
+                </div>
+                <h1>Drive Med</h1>
+                <p class="tagline">Автосервис премиум-класса. Лечим вашего железного коня с заботой и точностью.</p>
+                <div class="input-group">
+                    <input type="text" id="plateInput" placeholder="Введите номер авто (например: В799УХ790)">
+                    <button onclick="checkMedicalCard()">Проверить медкарту</button>
+                </div>
+            </div>
+        </div>
+    </header>
     
-    /* Header */
-    header {
-      background: linear-gradient(135deg, var(--blue), var(--accent));
-      color: white;
-      padding: var(--padding) var(--padding) calc(var(--padding) * 2);
-      position: relative;
-      text-align: center;
-    }
+    <!-- Навигация -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                Drive Med
+            </div>
+            <div class="nav-links">
+                <a href="#services">Услуги</a>
+                <a href="#subscriptions">Подписки</a>
+                <a href="#extras">Дополнительно</a>
+                <a href="#points">Баллы</a>
+                <a href="#contacts">Контакты</a>
+            </div>
+        </div>
+    </nav>
     
-    .hero {
-      max-width: 900px;
-      margin: auto;
-    }
+    <!-- Подписки -->
+    <section id="subscriptions">
+        <div class="container">
+            <div class="section-title">
+                <h2>Медицинские подписки</h2>
+                <p>Выберите программу обслуживания, которая подходит именно вашему автомобилю</p>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" onclick="showSubscriptions('combo')">Комбо</div>
+                <div class="tab" onclick="showSubscriptions('wash')">Мойка</div>
+                <div class="tab" onclick="showSubscriptions('service')">Сервис</div>
+                <div class="tab" onclick="showSubscriptions('tire')">Шины</div>
+                <div class="tab" onclick="showSubscriptions('premium')">Премиум</div>
+            </div>
+            
+            <div class="subscriptions-grid" id="subscriptionsContainer">
+                <!-- Подписки будут загружены через JS -->
+            </div>
+        </div>
+    </section>
     
-    .hero h1 {
-      font-size: 3em;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
+    <!-- Сертификаты и корпоративные решения -->
+    <section id="extras" style="background: #f8f9fa;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Дополнительные возможности</h2>
+                <p>Подарочные сертификаты и решения для бизнеса</p>
+            </div>
+            
+            <div class="extras-grid">
+                <div class="extra-card">
+                    <i class="fas fa-gift"></i>
+                    <h3>Подарочные сертификаты</h3>
+                    <p>Идеальный подарок для автовладельца. Любая сумма от 3 000 ₽</p>
+                    <button class="btn" onclick="buyGiftCard()" style="margin-top: 15px;">Купить сертификат</button>
+                </div>
+                
+                <div class="extra-card">
+                    <i class="fas fa-building"></i>
+                    <h3>Корпоративные решения</h3>
+                    <p>Обслуживание автопарка. Специальные условия для компаний</p>
+                    <button class="btn btn-outline" onclick="requestCorporate()" style="margin-top: 15px;">Запросить КП</button>
+                </div>
+                
+                <div class="extra-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Гарантия 3 года</h3>
+                    <p>На все виды работ. Единственный автосервис с такой гарантией</p>
+                    <button class="btn" onclick="showWarranty()" style="margin-top: 15px;">Подробнее</button>
+                </div>
+            </div>
+        </div>
+    </section>
     
-    .hero p {
-      font-size: 1.2em;
-      opacity: 0.9;
-      max-width: 600px;
-      margin: 0 auto;
-    }
+    <!-- Балльная система -->
+    <section id="points">
+        <div class="container">
+            <div class="section-title">
+                <h2>Бонусная программа</h2>
+                <p>Зарабатывайте и тратьте баллы на услуги сервиса</p>
+            </div>
+            
+            <div class="points-section">
+                <div class="points-header">
+                    <div class="points-balance">
+                        <i class="fas fa-star"></i>
+                        <span id="pointsBalance">1 850</span> баллов
+                    </div>
+                    <button class="btn" onclick="showPointsHistory()" style="width: auto; padding: 10px 20px;">История</button>
+                </div>
+                
+                <div class="points-actions">
+                    <div class="points-action" onclick="earnPoints('review')">
+                        <h4><i class="fas fa-comment-medical"></i> Отзыв</h4>
+                        <p>Оставьте отзыв и получите +300 баллов</p>
+                    </div>
+                    
+                    <div class="points-action" onclick="earnPoints('referral')">
+                        <h4><i class="fas fa-user-plus"></i> Привести друга</h4>
+                        <p>Получите +500 баллов за друга</p>
+                    </div>
+                    
+                    <div class="points-action" onclick="earnPoints('service')">
+                        <h4><i class="fas fa-tools"></i> Запланировать ТО</h4>
+                        <p>Запланируйте ТО и получите +200</p>
+                    </div>
+                </div>
+                
+                <h3 style="margin-bottom: 15px;">Потратить баллы</h3>
+                <div class="rewards-grid">
+                    <div class="reward-card">
+                        <h4>Антидождь</h4>
+                        <div class="reward-cost">450 баллов</div>
+                        <button class="btn" onclick="spendPoints(450, 'Антидождь')">Обменять</button>
+                    </div>
+                    
+                    <div class="reward-card">
+                        <h4>Чернение резины</h4>
+                        <div class="reward-cost">600 баллов</div>
+                        <button class="btn" onclick="spendPoints(600, 'Чернение резины')">Обменять</button>
+                    </div>
+                    
+                    <div class="reward-card">
+                        <h4>Комплексная мойка</h4>
+                        <div class="reward-cost">800 баллов</div>
+                        <button class="btn" onclick="spendPoints(800, 'Комплексная мойка')">Обменять</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     
-    /* Top Banner */
-    .top-banner {
-      background: #ffb703;
-      color: #000;
-      text-align: center;
-      padding: 12px;
-      font-weight: 600;
-      font-size: 0.9em;
-    }
+    <!-- Модальное окно медкарты -->
+    <div class="modal" id="medicalCardModal">
+        <div class="medical-card">
+            <div class="card-header">
+                <h2><i class="fas fa-file-medical"></i> Медицинская карта автомобиля</h2>
+                <button class="close-modal" onclick="closeModal()">✕</button>
+            </div>
+            
+            <div class="card-content">
+                <div class="patient-info">
+                    <div class="info-item">
+                        <h4>Пациент</h4>
+                        <p>Ford Focus III, 2014 г.в.</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Гос. номер</h4>
+                        <p id="modalPlate">В799УХ790</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Пробег</h4>
+                        <p>128 500 км</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Следующее ТО</h4>
+                        <p style="color: var(--accent);">через 2 300 км</p>
+                    </div>
+                </div>
+                
+                <div class="card-section">
+                    <h3><i class="fas fa-history"></i> История посещений</h3>
+                    <div id="visitsTimeline">
+                        <!-- Визиты будут добавлены через JS -->
+                    </div>
+                </div>
+                
+                <div class="card-section">
+                    <h3><i class="fas fa-chart-line"></i> График затрат</h3>
+                    <div class="chart-container">
+                        <canvas id="costChart" width="400" height="150"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card-section">
+                    <h3><i class="fas fa-stethoscope"></i> Рекомендации</h3>
+                    <div class="visit-item">
+                        <p><strong>1.</strong> Замена тормозных колодок — через 1 500 км</p>
+                        <p><strong>2.</strong> Проверка уровня масла — каждые 1 000 км</p>
+                        <p><strong>3.</strong> Диагностика подвески — рекомендована в октябре</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    /* Sections */
-    .section {
-      max-width: 1200px;
-      margin: var(--gap) auto;
-      padding: 0 var(--padding);
-    }
+    <!-- Футер -->
+    <footer id="contacts">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Drive Med</h3>
+                    <p>Автосервис, мойка и шиномонтаж премиум-класса. Лечим автомобили с 2018 года.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Автозаводская, 23</li>
+                        <li><i class="fas fa-phone"></i> +7 (495) 123-45-67</li>
+                        <li><i class="fas fa-clock"></i> 24/7, без выходных</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Услуги</h3>
+                    <ul>
+                        <li><a href="#">Диагностика</a></li>
+                        <li><a href="#">Техническое обслуживание</a></li>
+                        <li><a href="#">Кузовной ремонт</a></li>
+                        <li><a href="#">Мойка и химчистка</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Для бизнеса</h3>
+                    <ul>
+                        <li><a href="#" onclick="requestCorporate()">Корпоративные решения</a></li>
+                        <li><a href="#" onclick="buyGiftCard()">Подарочные сертификаты</a></li>
+                        <li><a href="#">Партнерская программа</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                © 2023 Drive Med. Все права защищены. Лечим ваши автомобили с любовью.
+            </div>
+        </div>
+    </footer>
     
-    .section h2 {
-      font-size: 2.2em;
-      text-align: center;
-      margin-bottom: calc(var(--gap) * 1.5);
-      color: var(--blue);
-    }
-    
-    /* Check Car Card */
-    .check-card {
-      background: var(--card);
-      border-radius: 18px;
-      padding: var(--padding);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
-      text-align: center;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .check-card input {
-      padding: 14px;
-      width: 260px;
-      font-size: 1em;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      margin: 10px 5px;
-    }
-    
-    .check-card button {
-      background: var(--blue);
-      color: white;
-      padding: 14px 25px;
-      border-radius: 10px;
-      font-size: 1em;
-      transition: all 0.3s ease;
-    }
-    
-    .check-card button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Medical Card */
-    .medical-card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: var(--padding);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-      display: none;
-    }
-    
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--gap);
-      border-bottom: 2px solid var(--light);
-      padding-bottom: 10px;
-    }
-    
-    .card-header h2 {
-      color: var(--blue);
-    }
-    
-    .status {
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.8em;
-    }
-    
-    .status.active {
-      background: var(--green);
-      color: white;
-    }
-    
-    .vital-signs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--gap);
-      margin-bottom: var(--gap);
-    }
-    
-    .sign {
-      text-align: center;
-      padding: 15px;
-      background: var(--light);
-      border-radius: 12px;
-    }
-    
-    .sign .icon {
-      font-size: 1.8em;
-      margin-bottom: 8px;
-    }
-    
-    .sign .label {
-      color: #666;
-      font-size: 0.9em;
-      margin-bottom: 4px;
-    }
-    
-    .sign .value {
-      font-weight: 700;
-      font-size: 1.1em;
-    }
-    
-    /* Health Graph */
-    #healthChart {
-      height: 300px;
-      margin: var(--gap) 0;
-    }
-    
-    /* Visits History */
-    .visits-history {
-      margin-top: var(--gap);
-    }
-    
-    .visit {
-      border-left: 4px solid var(--blue);
-      padding: 10px 15px;
-      margin-bottom: var(--gap);
-      background: var(--light);
-      border-radius: 0 8px 8px 0;
-    }
-    
-    .visit h4 {
-      margin: 0 0 5px 0;
-      color: var(--blue);
-    }
-    
-    .visit .date {
-      color: #666;
-      font-size: 0.9em;
-      margin-bottom: 8px;
-    }
-    
-    .visit .details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    
-    .detail {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .detail i {
-      color: var(--blue);
-      font-size: 0.9em;
-    }
-    
-    /* Points System */
-    .points-system {
-      background: var(--card);
-      border-radius: 20px;
-      padding: var(--padding);
-      margin: var(--gap) 0;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    .points-header {
-      display
+    <script>
+        // Данные подписок
+        const subscriptionData = {
+            combo: [
+                { 
+                    name: "Комбо Мини", 
+                    price: "8 900 ₽", 
+                    period: "/месяц",
+                    popular: false,
+                    features: ["Диагностика 1 раз в месяц", "2 комплексные мойки", "Приоритетная запись", "История обслуживания"]
+                },
+                { 
+                    name: "Комбо База", 
+                    price: "14 900 ₽", 
+                    period: "/месяц",
+                    popular: true,
+                    features: ["ТО + диагностика", "4 мойки", "Шиномонтаж 1 раз", "Электронная медкарта"]
+                },
+                { 
+                    name: "Комбо Премиум", 
+                    price: "24 900 ₽", 
+                    period: "/месяц",
+                    popular: false,
+                    features: ["Все услуги без ограничений", "Безлимитная мойка", "Личный авто-доктор", "Пожизненная гарантия"]
+                }
+            ],
+            wash: [
+                { 
+                    name: "Мойка Стандарт", 
+                    price: "3 900 ₽", 
+                    period: "/месяц",
+                    popular: false,
+                    features: ["4 экспресс-мойки", "Бесплатный пылесос", "Обработка стекол"]
+                },
+                { 
+                    name: "Мойка Премиум", 
+                    price: "6 900 ₽", 
+                    period: "/месяц",
+                    popular: true,
+                    features: ["8 комплексных моек", "Нанесение защитных покрытий", "Химчистка салона 1 раз"]
+                }
+            ],
+            service: [
+                { 
+                    name: "Сервис Базовый", 
+                    price: "5 900 ₽", 
+                    period: "/месяц",
+                    popular: false,
+                    features: ["Диагностика 1 раз", "Рекомендации врача", "Контрольный осмотр"]
+                },
+                { 
+                    name: "Сервис Полный", 
+                    price: "9 900 ₽", 
+                    period: "/месяц",
+                    popular: true,
+                    features: ["Полное ТО 1 раз", "Электронная история", "Сезонная подготовка"]
+                }
+            ],
+            tire: [
+                { 
+                    name: "Шины Базовый", 
+                    price: "4 900 ₽", 
+                    period: "/сезон",
+                    popular: false,
+                    features: ["1 шиномонтаж", "Балансировка", "Хранение резины"]
+                },
+                { 
+                    name: "Шины Премиум", 
+                    price: "12 900 ₽", 
+                    period: "/сезон",
+                    popular: true,
+                    features: ["Приоритетная запись", "Контроль давления", "Ремонт проколов"]
+                }
+            ],
+            premium: [
+                { 
+                    name: "Платина", 
+                    price: "49 900 ₽", 
+                    period: "/месяц",
+                    popular: true,
+                    features: ["Все услуги без ограничений", "Личный менеджер", "Авто на подмену", "Выездной сервис 24/7"]
+                }
+            ]
+        };
+        
+        // Данные медкарты для номера В799УХ790
+        const medicalCardData = {
+            "В799УХ790": {
+                car: "Ford Focus III, 2014 г.в.",
+                mileage: "128 500 км",
+                nextService: "через 2 300 км",
+                visits: [
+                    { date: "15.08.2023", problem: "Посторонний стук в подвеске", solution: "Замена амортизаторов, балансировка", cost: "24 500 ₽", mileage: "126 200 км" },
+                    { date: "03.07.2023", problem: "Замена масла, ТО", solution: "Полное техническое обслуживание", cost: "18 700 ₽", mileage: "124 000 км" },
+                    { date: "22.05.2023", problem: "Проблемы с тормозами", solution: "Замена тормозных колодок, прокачка", cost: "12 300 ₽", mileage: "121 500 км" },
+                    { date: "10.04.2023", problem: "Села аккумуляторная батарея", solution: "Замена АКБ, диагностика электроники", cost: "15 800 ₽", mileage: "119 000 км" },
+                    { date: "28.02.2023", problem: "Зимняя подготовка", solution: "Замена резины, антикоррозийная обработка", cost: "9 500 ₽", mileage: "116 800 км" }
+                ],
+                recommendations: [
+                    "Замена тормозных колодок — через 1 500 км",
+                    "Проверка уровня масла — каждые 1 000 км",
+                    "Диагностика подвески — рекомендована в октябре",
+                    "Замена воздушного фильтра — при следующем ТО"
+                ]
+            },
+            "А123ВС777": {
+                car: "Toyota Camry, 2020 г.в.",
+                mileage: "45 200 км",
+                nextService: "через 4 800 км",
+                visits: [
+                    { date: "10.09.2023", problem: "Плановое ТО", solution: "Замена масла, фильтров, диагностика", cost: "15 200 ₽", mileage: "44 500 км" },
+                    { date: "15.03.2023", problem: "Замена резины", solution: "Сезонная замена, балансировка", cost: "8 700 ₽", mileage: "38 000 км" }
+                ],
+                recommendations: [
+                    "Следующее ТО — через 4 800 км",
+                    "Проверка тормозной жидкости — рекомендована",
+                    "Диагностика кондиционера — весной"
+                ]
+            },
+            "О777ОО177": {
+                car: "BMW X5, 2018 г.в.",
+                mileage: "89 300 км",
+                nextService: "через 700 км",
+                visits: [
+                    { date: "20.09.2023", problem: "Диагностика двигателя", solution: "Замена свечей, чистка форсунок", cost: "32 500 ₽", mileage: "88 600 км" },
+                    { date: "05.06.2023", problem: "Ремонт подвески", solution: "Замена сайлентблоков, регулировка", cost: "41 200 ₽", mileage: "82 100 км" }
+                ],
+                recommendations: [
+                    "СРОЧНО: Требуется ТО — через 700 км",
+                    "Проверка АКБ — перед зимой",
+                    "Диагностика полного привода"
+                ]
+            }
+        };
+        
+        // История баллов
+        const pointsHistory = [
+            { date: "15.11.2023", action: "Отзыв на Яндекс.Картах", points: "+300" },
+            { date: "03.11.2023", action: "Плановое ТО", points: "+200" },
+            { date: "25.10.2023", action: "Привел друга", points: "+500" },
+            { date: "10.10.2023", action: "Обмен на антидождь", points: "-450" }
+        ];
+        
+        // Текущий баланс баллов
+        let userPoints = 1850;
+        let chart = null;
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            showSubscriptions('combo');
+            loadPointsHistory();
+        });
+        
+        // Показать подписки
+        function showSubscriptions(type) {
+            // Обновляем активную вкладку
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Загружаем подписки
+            const container = document.getElementById('subscriptionsContainer');
+            const subscriptions = subscriptionData[type];
+            
+            let html = '';
+            subscriptions.forEach(sub => {
+                html += `
+                <div class="subscription-card ${sub.popular ? 'popular' : ''}">
+                    <h3>${sub.name}</h3>
+                    <div class="price">${sub.price} <span>${sub.period}</span></div>
+                    <ul class="features-list">
+                        ${sub.features.map(feature => `<li><i class="fas fa-check"></i> ${feature}</li>`).join('')}
+                    </ul>
+                    <button class="btn" onclick="subscribe('${sub.name}')">Оформить</button>
+                </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Проверить медкарту
+        function checkMedicalCard() {
+            const plateInput = document.getElementById('plateInput');
+            const plate = plateInput.value.trim().toUpperCase();
+            
+            if (medicalCardData[plate]) {
+                // Нашли автомобиль в базе
+                showMedicalCard(plate);
+            } else if (plate === "") {
+                showNotification("Пожалуйста, введите номер автомобиля", "error");
+            } else {
+                showNotification("Автомобиль с таким номером не найден. Запишитесь на первичный осмотр!", "error");
+            }
+        }
+        
+        // Показать медкарту
+        function showMedicalCard(plate) {
+            const data = medicalCardData[plate];
+            
+            // Заполняем данные
+            document.getElementById('modalPlate').textContent = plate;
+            
+            const patientInfo = document.querySelector('.patient-info');
+            patientInfo.innerHTML = `
+                <div class="info-item">
+                    <h4>Пациент</h4>
+                    <p>${data.car}</p>
+                </div>
+                <div class="info-item">
+                    <h4>Гос. номер</h4>
+                    <p>${plate}</p>
+                </div>
+                <div class="info-item">
+                    <h4>Пробег</h4>
+                    <p>${data.mileage}</p>
+                </div>
+                <div class="info-item">
+                    <h4>Следующее ТО</h4>
+                    <p style="color: var(${data.nextService.includes('СРОЧНО') ? '--accent' : '--primary'});">${data.nextService}</p>
+                </div>
+            `;
+            
+            // Заполняем историю посещений
+            const visitsContainer = document.getElementById('visitsTimeline');
+            let visitsHtml = '';
+            
+            data.visits.forEach(visit => {
+                visitsHtml += `
+                <div class="visit-item">
+                    <div class="visit-date">
+                        <span>${visit.date}</span>
+                        <span class="visit-amount">${visit.cost}</span>
+                    </div>
+                    <p><strong>Пробег:</strong> ${visit.mileage}</p>
+                    <p><strong>Жалоба:</strong> ${visit.problem}</p>
+                    <p><strong>Лечение:</strong> ${visit.solution}</p>
+                </div>
+                `;
+            });
+            
+            visitsContainer.innerHTML = visitsHtml;
+            
+            // Заполняем рекомендации
+            const recommendationsContainer = document.querySelector('.visit-item');
+            let recommendationsHtml = '';
+            
+            data.recommendations.forEach((rec, index) => {
+                recommendationsHtml += `<p><strong>${index + 1}.</strong> ${rec}</p>`;
+            });
+            
+            recommendationsContainer.innerHTML = recommendationsHtml;
+            
+            // Создаем график
+            createChart(data.visits);
+            
+            // Показываем модальное окно
+            document.getElementById('medicalCardModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Создать график
+        function createChart(visits) {
+            const ctx = document.getElementById('costChart').getContext('2d');
+            
+            // Если график уже существует, уничтожаем его
+            if (chart) {
+                chart.destroy();
+            }
+            
+            // Подготавливаем данные
+            const labels = visits.map(v => v.date).reverse();
+            const costs = visits.map(v => parseInt(v.cost.replace(/[^\d]/g, '')) / 1000).reverse();
+            
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Затраты (тыс. ₽)',
+                        data: costs,
+                        borderColor: '#00b4d8',
+                        backgroundColor: 'rgba(0, 180, 216, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Закрыть модальное окно
+        function closeModal() {
+            document.getElementById('medicalCardModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Заработать баллы
+        function earnPoints(type) {
+            let points = 0;
+            let message = '';
+            
+            switch(type) {
+                case 'review':
+                    points = 300;
+                    message = 'Спасибо за ваш отзыв! На ваш счет начислено 300 баллов.';
+                    break;
+                case 'referral':
+                    points = 500;
+                    message = 'Ваш друг записался к нам! Вы получаете 500 баллов.';
+                    break;
+                case 'service':
+                    points = 200;
+                    message = 'Вы запланировали ТО! Авансом начисляем 200 баллов.';
+                    break;
+            }
+            
+            userPoints += points;
+            updatePointsDisplay();
+            
+            // Добавляем в историю
+            pointsHistory.unshift({
+                date: new Date().toLocaleDateString('ru-RU'),
+                action: message.split('!')[0],
+                points: `+${points}`
+            });
+            
+            showNotification(message, "success");
+        }
+        
+        // Потратить баллы
+        function spendPoints(cost, service) {
+            if (userPoints >= cost) {
+                userPoints -= cost;
+                updatePointsDisplay();
+                
+                // Добавляем в историю
+                pointsHistory.unshift({
+                    date: new Date().toLocaleDateString('ru-RU'),
+                    action: `Обмен на "${service}"`,
+                    points: `-${cost}`
+                });
+                
+                showNotification(`Вы успешно обменяли ${cost} баллов на услугу "${service}"!`, "success");
+            } else {
+                showNotification(`Недостаточно баллов. Вам нужно еще ${cost - userPoints} баллов.`, "error");
+            }
+        }
+        
+        // Обновить отображение баллов
+        function updatePointsDisplay() {
+            document.getElementById('pointsBalance').textContent = userPoints.toLocaleString();
+        }
+        
+        // Показать историю баллов
+        function showPointsHistory() {
+            let historyHtml = '<div style="margin-top: 20px;">';
+            historyHtml += '<h3 style="margin-bottom: 15px;">История операций</h3>';
+            
+            pointsHistory.forEach(item => {
+                const pointClass = item.points.startsWith('+') ? 'style="color: var(--success);"' : 'style="color: var(--accent);"';
+                historyHtml += `
+                <div class="visit-item" style="margin-bottom: 10px;">
+                    <div class="visit-date">
+                        <span>${item.date}</span>
+                        <span ${pointClass}>${item.points}</span>
+                    </div>
+                    <p>${item.action}</p>
+                </div>
+                `;
+            });
+            
+            historyHtml += '</div>';
+            
+            showNotification(historyHtml, "success", true);
+        }
+        
+        // Загрузить историю баллов
+        function loadPointsHistory() {
+            // Инициализация истории
+        }
+        
+        // Показать уведомление
+        function showNotification(message, type = "success", isHtml = false) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            if (isHtml) {
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    <div>${message}</div>
+                    <button onclick="this.parentElement.remove()" style="background:none; border:none; color:var(--gray); cursor:pointer; margin-left:auto;">✕</button>
+                `;
+            } else {
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    <div>${message}</div>
+                    <button onclick="this.parentElement.remove()" style="background:none; border:none; color:var(--gray); cursor:pointer; margin-left:auto;">✕</button>
+                `;
+            }
+            
+            document.body.appendChild(notification);
+            
+            // Удаляем предыдущие уведомления
+            const notifications = document.querySelectorAll('.notification');
+            if (notifications.length > 3) {
+                notifications[0].remove();
+            }
+            
+            // Автоматическое удаление
+            if (!isHtml) {
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 4000);
+            }
+        }
+        
+        // Дополнительные функции
+        function subscribe(name) {
+            showNotification(`Вы выбрали подписку "${name}". Наш менеджер свяжется с вами для оформления.`, "success");
+        }
+        
+        function buyGiftCard() {
+            showNotification("Подарочный сертификат можно приобрести у администратора или онлайн. Свяжитесь с нами!", "success");
+        }
+        
+        function requestCorporate() {
+            showNotification("Заявка на корпоративное обслуживание отправлена. Наш менеджер свяжется с вами в течение часа.", "success");
+        }
+        
+        function showWarranty() {
+            showNotification("Гарантия 3 года распространяется на все виды работ при условии регулярного обслуживания в нашем сервисе.", "success");
+        }
+        
+        // Закрытие модалки по клику на фон
+        window.onclick = function(event) {
+            const modal = document.getElementById('medicalCardModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Пример номеров для тестирования
+        document.getElementById('plateInput').addEventListener('focus', function() {
+            if (this.value === '') {
+                this.placeholder = 'Например: В799УХ790, А123ВС777, О777ОО177';
+            }
+        });
+    </script>
+</body>
+</html>
